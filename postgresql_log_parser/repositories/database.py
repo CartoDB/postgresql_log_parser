@@ -1,0 +1,2 @@
+class DatabaseRepository(object):
+    pass

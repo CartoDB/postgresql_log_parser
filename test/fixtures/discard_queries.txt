@@ -1,0 +1,4 @@
+Mar 21 15:17:01 dbd-team postgres[51760]: [21-1] 2017-03-21 15:17:01 GMT [unknown] [unknown] [unknown] LOG:  incomplete startup packet
+Mar 21 15:17:02 dbd-team postgres: invalidation: {"retries": 0, "table_name": "public.sla", "termination_state": 0, "error": "", "duration": 0.00366592, "timestamp": "2017-03-21 15:17:02 UTC", "database": "cartodb_user_c10cc7bc-b32a-4c3c-82ac-80ac7cae8523_db", "dbuser": "cartodb_user_c10cc7bc-b32a-4c3c-82ac-80ac7cae8523"}
+Mar 21 14:24:01 cdb-dev postgres[1575]: [224-1] 2017-03-21 14:24:01 GMT    LOG:  checkpoint starting: time
+beaver_healthcheck
