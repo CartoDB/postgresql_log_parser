@@ -1,1 +1,2 @@
-from py_parsing import PyParsingParser
+from postgresql_log_parser.parsers.py_parsing import PyParsingParser
+from postgresql_log_parser.parsers.regexp import RegexpParser

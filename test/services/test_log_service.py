@@ -3,19 +3,20 @@
 
 import unittest
 
-from ..test_helper import from_fixture
+from ..test_helper import fixture_path
 from postgresql_log_parser.services import LogService
-from postgresql_log_parser.parsers import PyParsingParser
+from postgresql_log_parser.parsers import PyParsingParser, RegexpParser
 
 class LogParserTestCase(unittest.TestCase):
-    
-    def setUp(self):
-        pattern = '(DISCARD ALL|SET\s|SELECT\s1)'
-        self.parser = PyParsingParser(filter_pattern=pattern)
-        self.service = LogService(parser=self.parser)
 
-    def test_postgresql_1mb_log_file(self):
-        self.service.log_parse('/home/ubuntu/www/misc/basemaps_research/logs/postgresql_1mb.log')
-    
-    # def test_postgresql_50_log_file(self):
-    #     self.service.log_parse('/home/ubuntu/www/misc/basemaps_research/logs/postgresql_50mb.log')
+    def setUp(self):
+        self.parser_pyparsing = PyParsingParser()
+        self.parser_regexp = RegexpParser()
+        self.service_pyparsing = LogService(parser=self.parser_pyparsing)
+        self.service_regexp = LogService(parser=self.parser_regexp)
+
+    def test_postgresql_log_file_pyparsing(self):
+        self.service_pyparsing.log_parse(fixture_path('query.txt'))
+
+    def test_postgresql_log_file_regexp(self):
+        self.service_regexp.log_parse(fixture_path('query.txt'))
