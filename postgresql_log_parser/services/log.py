@@ -4,7 +4,7 @@ Log parser service
 import mmap
 import json
 
-from postgresql_log_parser.parsers import PyParsingParser
+from postgresql_log_parser.parsers import RegexpParser
 from postgresql_log_parser.repositories import FileRepository
 
 class LogService(object):
@@ -13,7 +13,7 @@ class LogService(object):
     """
 
     def __init__(self, parser=None, repository=None):
-        self.parser = parser or PyParsingParser()
+        self.parser = parser or RegexpParser()
         self.repository = repository or FileRepository()
         self.buffer = []
 
@@ -44,6 +44,10 @@ class LogService(object):
                             self.buffer.append(json.dumps(current_line))
                             self.__process_lines(1000)
                     current_line_block = [line]
+            if len(current_line_block) > 1:
+                multipart_line = self.__process_multipart_line(current_line_block)
+                if self.__valid_line(multipart_line):
+                    self.buffer.append(json.dumps(multipart_line))
             self.__process_lines(process_all=True)
 
     def __valid_line(self, line):
