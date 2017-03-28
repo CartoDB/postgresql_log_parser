@@ -3,8 +3,7 @@
 
 import unittest
 
-from ..test_helper import fixture_path
-from postgresql_log_parser.services import LogService
+from postgresql_log_parser.services import LogParserService, LogDataExtractionService
 from postgresql_log_parser.parsers import PyParsingParser, RegexpParser
 from postgresql_log_parser.repositories import InMemoryRepository
 
@@ -41,3 +40,18 @@ class LogParserServiceTestCase(unittest.TestCase):
         parsed_data = self.repository.get_all()
         print(parsed_data)
         self.assertEqual(len(parsed_data), 2)
+
+class LogDataExtractionServiceTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.repository = InMemoryRepository()
+        self.service = LogDataExtractionService(repository=self.repository)
+
+    def test_should_extract_data_from_previous_process_correctly(self):
+        self.service.process(fixture_path('processed_log.txt'))
+        self.assertEqual(len(self.repository.get_all()), 4)
+
+    def test_should_extract_data_from_user_queries_correctly(self):
+        self.service.process(fixture_path('user_queries_processed.txt'))
+        print(self.repository.get_all())
+        self.assertEqual(len(self.repository.get_all()), 2)
