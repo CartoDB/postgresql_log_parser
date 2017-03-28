@@ -1,1 +1,2 @@
 from filesystem import FileRepository
+from memory import InMemoryRepository

@@ -1,62 +1,54 @@
-"""
-Log parser service
-"""
-import mmap
 import json
+import re
+import hashlib
+import psqlparse
 
 from postgresql_log_parser.parsers import RegexpParser
 from postgresql_log_parser.repositories import FileRepository
+from postgresql_log_parser.utils.geo import GeoUtils
 
-class LogService(object):
+class LogParserService(object):
     """
     Class to parse postgresql logs
     """
 
-    def __init__(self, parser=None, repository=None):
+    def __init__(self, repository, parser=None):
         self.parser = parser or RegexpParser()
-        self.repository = repository or FileRepository()
-        self.buffer = []
+        self.repository = repository
+        self.process_buffer = {}
+        self.storage_buffer = []
 
-    def log_parse(self, file_name):
+    def parse(self, file_name):
         """
-        Method to parse the provided log file
+        Parse the log passed as file name argument
         """
         with open(file_name, mode='r+b') as f:
-            m = mmap.mmap(f.fileno(), 0, prot=mmap.PROT_READ)
-            # We're going to process previous line in order to
-            # be able to merge multipart
-            first_line = self.parser.parse_line(m.readline())
-            current_line_block = [first_line]
-            for line in iter(m.readline, ""):
-                line = self.parser.parse_line(line)
-                if len(line) == 0:
-                    continue
-                if line['multipart']:
-                    current_line_block.append(line)
-                else:
-                    if len(current_line_block) > 1:
-                        multipart_line = self.__process_multipart_line(current_line_block)
-                        if self.__valid_line(multipart_line):
-                            self.buffer.append(json.dumps(multipart_line))
-                    else:
-                        current_line = current_line_block[0]
-                        if self.__valid_line(current_line):
-                            self.buffer.append(json.dumps(current_line))
-                            self.__process_lines(1000)
-                    current_line_block = [line]
-            if len(current_line_block) > 1:
-                multipart_line = self.__process_multipart_line(current_line_block)
-                if self.__valid_line(multipart_line):
-                    self.buffer.append(json.dumps(multipart_line))
-            self.__process_lines(process_all=True)
+            for line in f:
+                parsed_line = self.parser.parse_line(line)
+                if 'pid' in parsed_line and 'pid_part' in parsed_line:
+                    hashkey = self.__generate_hash(
+                        parsed_line['pid'], parsed_line['pid_part']).hexdigest()[:12]
+                    if hashkey not in self.process_buffer:
+                        self.process_buffer[hashkey] = []
+                    self.process_buffer[hashkey].append(parsed_line)
+        self.__process_lines()
+
+    def __generate_hash(self, pid, pid_part):
+        return hashlib.sha256(b"{0}_{1}".format(pid, pid_part))
 
     def __valid_line(self, line):
         return 'command' in line and line['command'] in ['statement', 'execute']
 
-    def __process_lines(self, process_all=False, buffer_size=1000):
-        if process_all or len(self.buffer) % buffer_size == 0:
-            self.repository.store(self.buffer)
-            self.buffer = []
+    def __process_lines(self):
+        for _, lines in self.process_buffer.iteritems():
+            if len(lines) > 1:
+                line = self.__process_multipart_line(lines)
+            else:
+                line = lines[0]
+            if self.__valid_line(line):
+                self.storage_buffer.append(json.dumps(line))
+            self.__flush_storage_buffer(1000)
+        self.__flush_storage_buffer()
 
     def __process_multipart_line(self, lines):
         first_line = lines[0]
@@ -77,3 +69,9 @@ class LogService(object):
                 query = query.replace(key, value)
             first_line['query'] = query
         return first_line
+
+    def __flush_storage_buffer(self, buffer_limit=0):
+        if len(self.storage_buffer) >= buffer_limit:
+            self.repository.store(self.storage_buffer)
+            self.storage_buffer = []
+
