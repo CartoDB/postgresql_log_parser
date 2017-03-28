@@ -1,4 +1,6 @@
-class FileRepository(object):
+from repository import Repository
+
+class FileRepository(Repository):
 
     def __init__(self, file_name):
         self.file_name = file_name

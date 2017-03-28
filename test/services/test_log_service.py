@@ -38,7 +38,6 @@ class LogParserServiceTestCase(unittest.TestCase):
     def test_user_queries_log_is_processed_correctly_with_regexp(self):
         self.service_regexp.parse(fixture_path('user_queries.txt'))
         parsed_data = self.repository.get_all()
-        print(parsed_data)
         self.assertEqual(len(parsed_data), 2)
 
 class LogDataExtractionServiceTestCase(unittest.TestCase):
@@ -53,5 +52,4 @@ class LogDataExtractionServiceTestCase(unittest.TestCase):
 
     def test_should_extract_data_from_user_queries_correctly(self):
         self.service.process(fixture_path('user_queries_processed.txt'))
-        print(self.repository.get_all())
         self.assertEqual(len(self.repository.get_all()), 2)

@@ -1,4 +1,6 @@
-class InMemoryRepository(object):
+from repository import Repository
+
+class InMemoryRepository(Repository):
     def __init__(self):
         self.storage = []
 
