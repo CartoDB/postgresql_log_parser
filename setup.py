@@ -24,6 +24,6 @@ setup(
     install_requires=['pyparsing', 'psqlparse==1.0rc4'],
     extras_require={
         'dev': ['ipdb', 'ipython'],
-        'test': ['nose', 'mock']
+        'test': ['nose']
     }
 )
