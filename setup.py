@@ -21,7 +21,7 @@ setup(
     ],
     keywords='postgresql log parser',
     packages=find_packages(exclude=['contrib', 'docs', 'tests']),
-    install_requires=['pyparsing', 'psqlparse==1.0rc4'],
+    install_requires=['pyparsing'],
     extras_require={
         'dev': ['ipdb', 'ipython'],
         'test': ['nose']

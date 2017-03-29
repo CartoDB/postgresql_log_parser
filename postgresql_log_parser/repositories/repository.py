@@ -5,6 +5,3 @@ class Repository(object):
 
     @abstractmethod
     def store(self, data): raise NotImplementedError
-
-    @abstractmethod
-    def get_all(self): raise NotImplementedError
