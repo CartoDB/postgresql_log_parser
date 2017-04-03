@@ -1,6 +1,7 @@
 import json
 import re
 import hashlib
+import os
 
 from postgresql_log_parser.parsers import RegexpParser
 
@@ -15,7 +16,14 @@ class LogParserService(object):
         self.process_buffer = {}
         self.storage_buffer = []
 
-    def parse(self, file_name):
+    def parse_files(self, list_files):
+        """
+        Parse a directory with regexp to select the files to be processed
+        """
+        for file_name in list_files:
+            self.parse_file(file_name)
+
+    def parse_file(self, file_name):
         """
         Parse the log passed as file name argument
         """
@@ -41,6 +49,7 @@ class LogParserService(object):
                 line = lines[0]
             self.storage_buffer.append(json.dumps(line))
             self.__flush_storage_buffer(1000)
+        self.process_buffer = {}
         self.__flush_storage_buffer()
 
     def __process_multipart_line(self, lines):

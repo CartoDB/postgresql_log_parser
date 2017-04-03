@@ -91,15 +91,15 @@ class PyParsingParser(object):
             parsed_data = {'timestamp': data[5], 'user': data[6], 'database': data[7],
                            'pid': data[2], 'pid_part': data[3], 'part': data[4], 
                            'duration': data[8], 'command': data[9], 'query': data[10],
-                           'multipart': False}
+                           'host': data[1], 'multipart': False}
         elif len(data) == 9:
             parameters_list = self.__parse_parameters(data[8])
             parsed_data = {'timestamp': data[5], 'user': data[6], 'database': data[7],
                            'pid': data[2], 'pid_part': data[3], 'part': data[4], 
-                           'parameters': parameters_list, 'multipart': True}
+                           'parameters': parameters_list, 'host': data[1], 'multipart': True}
         elif len(data) == 6:
             parsed_data = {'timestamp': data[0], 'pid': data[2], 'pid_part': data[3],
-                           'part': data[4], 'query': data[5], 'multipart': True}
+                           'part': data[4], 'query': data[5], 'host': data[1], 'multipart': True}
         elif len(data) <= 4:
             parsed_data = {}
 

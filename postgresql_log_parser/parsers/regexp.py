@@ -25,13 +25,13 @@ class RegexpParser(object):
                 'database': data['database'], 'pid': data['pid'],
                 'pid_part': data['pid_part'], 'part': data['part'],
                 'duration': data['duration'], 'command': data['command'],
-                'query': data['query'], 'multipart': False}
+                'query': data['query'], 'host': data['host'], 'multipart': False}
     def __parameters_to_dict(self, data):
         parameters = self.__parse_parameters(data['parameters'])
         return {'timestamp': data['timestamp'], 'user': data['user'],
                 'database': data['database'], 'pid': data['pid'],
                 'pid_part': data['pid_part'], 'part': data['part'],
-                'parameters': parameters, 'multipart': True}
+                'parameters': parameters, 'host': data['host'], 'multipart': True}
     def __parse_parameters(self, str_parameters):
         pattern = re.compile(r'(?P<param_key>\$\d+)\s+\=\s+(?P<param_value>\S+)\,?', re.IGNORECASE)
         parameters = {}
@@ -45,4 +45,4 @@ class RegexpParser(object):
         return {'timestamp': data['timestamp'], 'user': data['user'],
                 'database': data['database'], 'pid': data['pid'],
                 'pid_part': data['pid_part'], 'part': data['part'],
-                'query': data['multipart_query'], 'multipart': True}
+                'query': data['multipart_query'], 'host': data['host'], 'multipart': True}
