@@ -14,7 +14,7 @@ class PyParsingParser(object):
                     self.__body_multipart_pattern(),
                     self.__discard_pattern()]), self.__discard_pattern()])
 
-    def parse_line(self,line):
+    def parse_line(self, line):
         try:
             if self.regex_pattern and self.regex_pattern.search(line):
                 return {}
@@ -26,11 +26,11 @@ class PyParsingParser(object):
             return []
 
     def __header_pattern(self):
-        timestamp = pyp.Combine(pyp.Word(pyp.alphas) + pyp.White() + pyp.Word(pyp.nums) +
-                                pyp.White() + pyp.Word(pyp.nums+':'))
+        date_pattern = pyp.Combine(pyp.Word(pyp.alphas) + pyp.White() + pyp.Word(pyp.nums) +
+                                   pyp.White() + pyp.Word(pyp.nums+':'))
         hostname = pyp.Word(pyp.alphanums+'-')
         pid = pyp.Suppress('postgres') + pyp.QuotedString('[', endQuoteChar=']') + pyp.Suppress(':' + pyp.White())
-        return timestamp + hostname + pid
+        return date_pattern + hostname + pid
 
     def __body_query_pattern(self):
         pid_part = pyp.Suppress('[') + pyp.Word(pyp.nums) + pyp.Suppress(
@@ -89,17 +89,17 @@ class PyParsingParser(object):
         # TODO should be a better way to indentify the type of parse
         if len(data) == 11:
             parsed_data = {'timestamp': data[5], 'user': data[6], 'database': data[7],
-                           'pid': data[2], 'pid_part': data[3], 'part': data[4], 
+                           'pid': data[2], 'pid_part': data[3], 'part': data[4],
                            'duration': data[8], 'command': data[9], 'query': data[10],
-                           'host': data[1], 'multipart': False}
+                           'host': data[1], 'date': data[0], 'multipart': False}
         elif len(data) == 9:
             parameters_list = self.__parse_parameters(data[8])
             parsed_data = {'timestamp': data[5], 'user': data[6], 'database': data[7],
-                           'pid': data[2], 'pid_part': data[3], 'part': data[4], 
-                           'parameters': parameters_list, 'host': data[1], 'multipart': True}
+                           'pid': data[2], 'pid_part': data[3], 'part': data[4],
+                           'parameters': parameters_list, 'host': data[1], 'date': data[0], 'multipart': True}
         elif len(data) == 6:
             parsed_data = {'timestamp': data[0], 'pid': data[2], 'pid_part': data[3],
-                           'part': data[4], 'query': data[5], 'host': data[1], 'multipart': True}
+                           'part': data[4], 'query': data[5], 'host': data[1], 'date': data[0], 'multipart': True}
         elif len(data) <= 4:
             parsed_data = {}
 

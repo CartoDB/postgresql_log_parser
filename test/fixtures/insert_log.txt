@@ -1,0 +1,12 @@
+Apr  4 04:55:07 dbdf31 postgres: [100-1] 2017-04-04 04:55:07 GMT cartodb_user_f32f20fb-ecdf-4e84-91b8-62cdd26fd93f cartodb_user_f32f20fb-ecdf-4e84-91b8-62cdd26fd93f_db cartodb_sqlapi LOG:  duration: 100.247 ms  statement:
+Apr  4 04:55:07 dbdf31 postgres: [100-2] #011    INSERT INTO ldata (the_geom, name, serial, time)
+Apr  4 04:55:07 dbdf31 postgres: [100-3] #011  VALUES (ST_GeomFromGeoJSON('{"type":"Point","coordinates":[-8.706771,42.672206],"crs":{"type":"name","properties":{"name":"EPSG:4326"}}}'), 'CM011', '0100320141200101', 'Tue, 04 Apr 2017 04:55:07 GMT'::timestamp)
+Apr  4 04:55:07 dbdf31 postgres: [100-4] #011  ON CONFLICT ON CONSTRAINT serial_unique DO NOTHING
+Apr  4 04:55:07 dbdf31 postgres: [43-1] 2017-04-04 04:55:07 GMT cartodb_user_f32f20fb-ecdf-4e84-91b8-62cdd26fd93f cartodb_user_f32f20fb-ecdf-4e84-91b8-62cdd26fd93f_db cartodb_sqlapi LOG:  duration: 142.026 ms  statement:
+Apr  4 04:55:07 dbdf31 postgres: [43-2] #011    INSERT INTO ldata (the_geom, name, serial, time)
+Apr  4 04:55:07 dbdf31 postgres: [43-3] #011  VALUES (ST_GeomFromGeoJSON('{"type":"Point","coordinates":[-6.369976,39.460876],"crs":{"type":"name","properties":{"name":"EPSG:4326"}}}'), 'CM066', '0100320151200181', 'Tue, 04 Apr 2017 04:55:07 GMT'::timestamp)
+Apr  4 04:55:07 dbdf31 postgres: [43-4] #011  ON CONFLICT ON CONSTRAINT serial_unique DO NOTHING
+Apr  4 04:55:07 dbdf31 postgres: [100-1] 2017-04-04 04:55:07 GMT cartodb_user_f32f20fb-ecdf-4e84-91b8-62cdd26fd93f cartodb_user_f32f20fb-ecdf-4e84-91b8-62cdd26fd93f_db cartodb_sqlapi LOG:  duration: 100.247 ms  statement:
+Apr  4 04:55:07 dbdf31 postgres: [100-2] #011    INSERT INTO ldata (the_geom, name, serial, time)
+Apr  4 04:55:07 dbdf31 postgres: [100-3] #011  VALUES (ST_GeomFromGeoJSON('{"type":"Point","coordinates":[-8.706771,42.672206],"crs":{"type":"name","properties":{"name":"EPSG:4326"}}}'), 'CM011', '0100320141200101', 'Tue, 04 Apr 2017 04:55:07 GMT'::timestamp)
+Apr  4 04:55:07 dbdf31 postgres: [100-4] #011  ON CONFLICT ON CONSTRAINT serial_unique DO NOTHING

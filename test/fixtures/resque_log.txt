@@ -1,0 +1,5 @@
+Apr  4 04:17:28 dbdf31 postgres[28752]: [1456-1] 2017-04-04 04:17:28 GMT cartodb_user_2a5ed283-e29b-4967-a6a9-9b39578b8bf3 cartodb_user_2a5ed283-e29b-4967-a6a9-9b39578b8bf3_db resque-1.25.2: Processing imports since 1491279447 [Resque::Imp LOG:  duration: 5.163 ms  statement:
+Apr  4 04:17:28 dbdf31 postgres[28752]: [1456-2] #011          SELECT public.AddGeometryColumn(
+Apr  4 04:17:28 dbdf31 postgres[28752]: [1456-3] #011            'cdb_importer','importer_9ce2d88618ed11e7ada70ef7f98ade21','the_geom',4326,'geometry',2
+Apr  4 04:17:28 dbdf31 postgres[28752]: [1456-4] #011          );
+Apr  4 04:17:28 dbdf31 postgres[28752]: [1456-5] #011
