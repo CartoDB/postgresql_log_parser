@@ -102,3 +102,14 @@ class LogParserServiceTestCase(unittest.TestCase):
         self.assertEqual(data['pid_part'], '1456')
         self.assertEqual(data['duration'], '5.163')
         self.assertEqual(data['query'], "SELECT public.AddGeometryColumn( 'cdb_importer','importer_9ce2d88618ed11e7ada70ef7f98ade21','the_geom',4326,'geometry',2 );")
+
+    def test_user_parse_multipart_without_011_string_with_regexp(self):
+        self.service_regexp.parse_file(fixture_path('multipart_without_011.txt'))
+        parsed_data = self.repository.get_all()
+        self.assertEqual(len(parsed_data), 1)
+        data = json.loads(parsed_data[0])
+        self.assertEqual(data['timestamp'], '2017-04-04 04:54:50')
+        self.assertEqual(data['pid'], '20373')
+        self.assertEqual(data['pid_part'], '49')
+        self.assertEqual(data['duration'], '21.588')
+        self.assertEqual(data['query'], 'SELECT "pg_attribute"."attname" AS "name", CAST("pg_attribute"."atttypid" AS integer) AS "oid", format_type("pg_type"."oid", "pg_attribute"."atttypmod") AS "db_type", pg_get_expr("pg_attrdef"."adbin", "pg_class"."oid") AS "default", NOT "pg_attribute"."attnotnull" AS "allow_null", COALESCE(("pg_attribute"."attnum" = ANY("pg_index"."indkey")), false) AS "primary_key", "pg_namespace"."nspname" FROM "pg_class" INNER JOIN "pg_attribute" ON ("pg_attribute"."attrelid" = "pg_class"."oid") INNER JOIN "pg_type" ON ("pg_type"."oid" = "pg_attribute"."atttypid") INNER JOIN "pg_namespace" ON ("pg_namespace"."oid" = "pg_class"."relnamespace") LEFT OUTER JOIN "pg_attrdef" ON (("pg_attrdef"."adrelid" = "pg_class"."oid") AND ("pg_attrdef"."adnum" = "pg_attribute"."attnum")) LEFT OUTER JOIN "pg_index" ON (("pg_index"."indrelid" = "pg_class"."oid") AND ("pg_index"."indisprimary" IS TRUE)) WHERE (("pg_attribute"."attisdropped" IS FALSE) AND ("pg_attribute"."attnum" > 0) AND ("pg_class"."relname" = \'guns_n_roses_in_chicago\') AND ("pg_namespace"."nspname" = \'public\')) ORDER BY "pg_attribute"."attnum"')
