@@ -2,6 +2,7 @@ import json
 import re
 import hashlib
 import os
+import gzip
 
 from postgresql_log_parser.parsers import RegexpParser
 
@@ -27,7 +28,11 @@ class LogParserService(object):
         """
         Parse the log passed as file name argument
         """
-        with open(file_name, mode='r+b') as f:
+        open_fn = open
+        if file_name[-2:] == 'gz':
+            open_fn = gzip.open
+        print 'processing: {0}'.format(file_name)
+        with open_fn(file_name, mode='r+b') as f:
             for line in f:
                 parsed_line = self.parser.parse_line(line)
                 if 'pid' in parsed_line and 'pid_part' in parsed_line:
@@ -77,7 +82,10 @@ class LogParserService(object):
                 line = self.__process_multipart_line(lines)
             else:
                 line = lines[0]
-                line['query'] = line['query'].strip()
+                if 'query' in line:
+                    line['query'] = line['query'].strip()
+                else:
+                    print 'not query: {0}'.format(line)
             self.storage_buffer.append(json.dumps(line))
             self.__flush_storage_buffer(1000)
         self.process_buffer = {}
