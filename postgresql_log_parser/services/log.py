@@ -72,7 +72,7 @@ class LogParserService(object):
         pid_part = parsed_line['pid_part']
         date = parsed_line['date']
         if pid:
-            return hashlib.sha256(b"{0}_{1}_{2}".format(pid, pid_part, index))
+            return hashlib.sha256(b"{0}_{1}_{2}_{3}".format(pid, pid_part, date, index))
         else:
             return hashlib.sha256(b"{0}_{1}_{2}".format(date, pid_part, index))
 
